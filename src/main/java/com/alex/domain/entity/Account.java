@@ -1,45 +1,53 @@
 package com.alex.domain.entity;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "users")
+// ACCOUNT {
+//     int id PK
+//     int user_id FK
+//     string name
+//     string type
+//     decimal balance
+//     string currency
+// }
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-
+@Entity(name = "accounts")
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false, unique = true)
     private UUID id;
-    
+
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String email;
-
     @Column(nullable = false, length = 50)
-    private String password_hash;
+    private String type;
 
-    @Column(nullable = false, length = 50)
-    private LocalDateTime created_at;
+    @Column(nullable = false, length = 10)
+    private String currency;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accounts;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal balance;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
