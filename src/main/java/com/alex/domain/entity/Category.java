@@ -1,10 +1,10 @@
 package com.alex.domain.entity;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,8 +19,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "accounts")
-public class Account {
+@Entity(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false, unique = true)
@@ -30,15 +30,18 @@ public class Account {
     private String name;
 
     @Column(nullable = false, length = 50)
+    private String icon;
+
+    @Column(nullable = false, length = 9)
+    private String color_hex;
+
+    @Column(nullable = false, length = 50)
     private String type;
 
-    @Column(nullable = false, length = 10)
-    private String currency;
+    @Column(nullable = false, length = 50)
+    private boolean is_default;
 
-    @Column(nullable = false, precision = 19, scale = 2)
-    private BigDecimal balance;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 }
